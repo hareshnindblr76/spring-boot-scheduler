@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,9 +23,13 @@ public class MessageController {
     
     private static Set<Integer> amicableNumbers = new HashSet<Integer>();
     
-    static {
+    @Value("${ProjectEuler.UPPER}")
+    private  String upperLimit;
+    
+    @PostConstruct
+    public void init() {
     	System.out.println("Finding all amicable numbers");
-    	int sumOfDivisors[] = new int[20000];
+    	int sumOfDivisors[] = new int[Integer.parseInt(upperLimit)];
     	Arrays.fill(sumOfDivisors, 1);
     	for(int i=2;i<10000;i++){
     		for(int j=i;j<20000;j+=i){

@@ -11,6 +11,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -19,13 +20,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class RequestScheduler {
 
+	@Value("${ProjectEuler.UPPER}")
+	private String upper;
+	
+	@Value("${ProjectEuler.LOWER}")
+	private String lower;
 	@Scheduled(initialDelay=3000, fixedRate=3000)
 	public void eulerProblemSeedGenerator(){
 		
 		Random r = new Random();
 		int missionId = r.nextInt(900)+100;
 		r= new Random();
-		int seed = r.nextInt(1900)*10+1000;
+		
+		int seed = r.nextInt(Integer.parseInt(upper))+Integer.parseInt(lower);
 		Map<String, String> requestJsonMap = new HashMap<>();
 		requestJsonMap.put("missionId",String.valueOf(missionId));
 		requestJsonMap.put("seed", String.valueOf(seed));
